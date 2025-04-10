@@ -9,7 +9,7 @@
 	},
 	"bin": {
 		"npmjs-analytics": "index.js"
-	}
+	},
 
 	"keywords": [
 		"npm",
