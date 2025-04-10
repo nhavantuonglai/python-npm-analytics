@@ -30,7 +30,7 @@ function messages(msg_type, ...args) {
 async function getPackageList(maintainer) {
 	try {
 		const response = await axios.get(`https://registry.npmjs.org/-/v1/search?text=maintainer:${maintainer}`, {
-			headers: { 'User-Agent': 'npm-analytics-tool' } // Thêm header để tránh bị chặn
+			headers: { 'User-Agent': 'npm-analytics-tool' }
 		});
 		const packages = response.data.objects.map(pkg => pkg.package.name);
 		console.log(messages("package-found", packages.length, maintainer, packages.join(', ')));
