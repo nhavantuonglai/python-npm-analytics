@@ -21,4 +21,9 @@ jobs:
           git config user.email "action@github.com"
           git add stats.md
           git commit -m "Update npm analytics table" || echo "No changes to commit"
-          git push
+          git status
+          if git diff --staged --quiet; then
+            echo "No changes to push"
+          else
+            git push
+          fi
