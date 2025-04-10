@@ -1,4 +1,4 @@
-name: Generate NPM Stats
+name: Generate Python NPM Analytics
 
 on:
   schedule:
@@ -20,5 +20,5 @@ jobs:
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
           git add stats.md
-          git commit -m "Update npm stats table"
+          git commit -m "Update npm analytics table" || echo "No changes to commit"
           git push
