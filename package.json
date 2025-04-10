@@ -1,7 +1,7 @@
 {
 	"name": "npmjs-analytics",
-	"version": "1.0.14",
-	"description": "File and folder renamer (FFR) is a Python tool designed to automate the renaming of files and folders. It supports multiple renaming options, including date-based formats, size based formats, sequential numbering, adding custom characters, and random names.",
+	"version": "1.1.1",
+	"description": "NPMJS Analytics is a Node.js tool that analyzes download statistics for npm packages maintained by a specified user.",
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js"
