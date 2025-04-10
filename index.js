@@ -4,9 +4,9 @@ const axios = require('axios');
 
 async function getPackageList() {
   try {
-    const response = await axios.get('https://registry.npmjs.org/-/v1/search?text=scope:outdate');
+    const response = await axios.get('https://registry.npmjs.org/-/v1/search?text=maintainer:nhavantuonglai');
     const packages = response.data.objects.map(pkg => pkg.package.name);
-    console.log(`Đã tìm thấy ${packages.length} gói dưới scope @outdate`);
+    console.log(`Đã tìm thấy ${packages.length} gói do nhavantuonglai xuất bản`);
     return packages;
   } catch (error) {
     console.error('Lỗi khi lấy danh sách gói:', error.message);
@@ -26,11 +26,11 @@ async function getDownloads(packageName, period = 'last-month') {
 }
 
 async function displayDownloadStats() {
-  console.log('Đang lấy thống kê lượt tải cho các gói @outdate...');
+  console.log('Đang lấy thống kê lượt tải cho các gói do nhavantuonglai xuất bản...');
   
   const packages = await getPackageList();
   if (!packages.length) {
-    console.log('Không tìm thấy gói nào dưới scope @outdate.');
+    console.log('Không tìm thấy gói nào do nhavantuonglai xuất bản.');
     return;
   }
 
