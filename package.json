@@ -7,7 +7,7 @@
 		"start": "node index.js"
 	},
 	"bin": {
-		"npmjs": "index.js"
+		"npm-analytics": "index.js"
 	},
 
 	"keywords": [
