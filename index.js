@@ -2,35 +2,35 @@
 
 const axios = require('axios');
 
+async function getPackageList() {
+  try {
+    const response = await axios.get('https://registry.npmjs.org/-/v1/search?text=scope:outdate');
+    const packages = response.data.objects.map(pkg => pkg.package.name);
+    console.log(`Đã tìm thấy ${packages.length} gói dưới scope @outdate`);
+    return packages;
+  } catch (error) {
+    console.error('Lỗi khi lấy danh sách gói:', error.message);
+    return [];
+  }
+}
+
 async function getDownloads(packageName, period = 'last-month') {
   try {
     const response = await axios.get(`https://api.npmjs.org/downloads/point/${period}/${packageName}`);
+    console.log(`Lấy thành công lượt tải cho ${packageName}: ${response.data.downloads}`);
     return { name: packageName, downloads: response.data.downloads || 0 };
   } catch (error) {
-    console.error(`Lỗi khi lấy lượt tải cho ${packageName}:`, error.message);
+    console.error(`Lỗi khi lấy lượt tải cho ${packageName}: ${error.response ? error.response.status : error.message}`);
     return { name: packageName, downloads: 0 };
   }
 }
 
 async function displayDownloadStats() {
-  console.log('Đang lấy thống kê lượt tải cho các gói @nhavantuonglai...');
+  console.log('Đang lấy thống kê lượt tải cho các gói @outdate...');
   
-  // Danh sách gói thủ công (cập nhật theo gói thực tế của bạn)
-  const packages = [
-    '@nhavantuonglai/markdown-attribute',
-    '@nhavantuonglai/sitemap-extractor',
-    '@nhavantuonglai/folder-attribute',
-    '@nhavantuonglai/javascript-starfield',
-    '@nhavantuonglai/javascript-supernova',
-    '@nhavantuonglai/table-of-content',
-    '@nhavantuonglai/gemini-chat',
-    '@nhavantuonglai/folder-execute',
-    '@nhavantuonglai/npmjs-analytics'
-    // Thêm các gói khác bạn đã xuất bản vào đây
-  ];
-
+  const packages = await getPackageList();
   if (!packages.length) {
-    console.log('Không có gói nào được chỉ định.');
+    console.log('Không tìm thấy gói nào dưới scope @outdate.');
     return;
   }
 
