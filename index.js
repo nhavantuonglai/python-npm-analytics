@@ -2,55 +2,52 @@
 
 const axios = require('axios');
 const fs = require('fs');
-const chalk = require('chalk');
 
 async function getPackageList(maintainer = 'nhavantuonglai') {
-  try {
-    const response = await axios.get(`https://registry.npmjs.org/-/v1/search?text=maintainer:${maintainer}`);
-    const packages = response.data.objects.map(pkg => pkg.package.name);
-    console.log(chalk.green(`Đã tìm thấy ${packages.length} gói do ${maintainer} xuất bản`));
-    return packages;
-  } catch (error) {
-    console.error(chalk.red('Lỗi khi lấy danh sách gói:', error.message));
-    return [];
-  }
+	try {
+		const response = await axios.get(`https://registry.npmjs.org/-/v1/search?text=maintainer:${maintainer}`);
+		return response.data.objects.map(pkg => pkg.package.name);
+	} catch (error) {
+		console.error('Lỗi khi lấy danh sách gói:', error.message);
+		return [];
+	}
 }
 
 async function getDownloads(packageName) {
-  try {
-    const response = await axios.get(`https://api.npmjs.org/downloads/range/last-12-months/${packageName}`);
-    const downloads = response.data.downloads.reduce((sum, day) => sum + day.downloads, 0) || 0;
-    console.log(chalk.blue(`- ${packageName}: ${downloads} lượt tải`));
-    return { name: packageName, downloads };
-  } catch (error) {
-    console.error(chalk.red(`Lỗi khi lấy lượt tải cho ${packageName}: ${error.response?.status || error.message}`));
-    return { name: packageName, downloads: 0 };
-  }
+	try {
+		const response = await axios.get(`https://api.npmjs.org/downloads/range/last-12-months/${packageName}`);
+		const downloads = response.data.downloads.reduce((sum, day) => sum + day.downloads, 0) || 0;
+		return { name: packageName, downloads };
+	} catch (error) {
+		console.error(`Lỗi khi lấy lượt tải cho ${packageName}:`, error.message);
+		return { name: packageName, downloads: 0 };
+	}
 }
 
-async function generateStats() {
-  console.log(chalk.cyan('Đang lấy thống kê lượt tải trong 12 tháng qua...'));
+async function generateStatsTable() {
+	const packages = await getPackageList();
+	if (!packages.length) {
+		console.log('Không tìm thấy gói nào.');
+		return;
+	}
 
-  const packages = await getPackageList();
-  if (!packages.length) {
-    console.log(chalk.yellow('Không tìm thấy gói nào do nhavantuonglai xuất bản.'));
-    return;
-  }
+	const downloadPromises = packages.map(pkg => getDownloads(pkg));
+	const downloadStats = await Promise.all(downloadPromises);
 
-  const downloadPromises = packages.map(pkg => getDownloads(pkg));
-  const downloadStats = await Promise.all(downloadPromises);
+	const totalDownloads = downloadStats.reduce((sum, pkg) => sum + pkg.downloads, 0);
+	const topPackages = downloadStats.sort((a, b) => b.downloads - a.downloads).slice(0, 3);
 
-  const totalDownloads = downloadStats.reduce((sum, pkg) => sum + pkg.downloads, 0);
-  const topPackages = downloadStats.sort((a, b) => b.downloads - a.downloads).slice(0, 3);
+	let table = `### Thống kê lượt tải npm trong 12 tháng qua\n\n`;
+	table += `Tổng lượt tải: ${totalDownloads}\n\n`;
+	table += `#### Danh sách 3 package có lượt tải cao nhất\n\n`;
+	table += `| Thứ hạng | Tên gói						 | Lượt tải |\n`;
+	table += `|----------|---------------------|----------|\n`;
+	topPackages.forEach((pkg, index) => {
+		table += `| ${index + 1}			 | ${pkg.name.padEnd(19)} | ${pkg.downloads.toString().padEnd(8)} |\n`;
+	});
 
-  const stats = {
-    totalDownloads,
-    topPackages,
-    lastUpdated: new Date().toISOString()
-  };
-
-  fs.writeFileSync('stats.json', JSON.stringify(stats, null, 2));
-  console.log(chalk.green('Đã tạo file stats.json'));
+	fs.writeFileSync('stats.md', table);
+	console.log('Đã tạo file stats.md');
 }
 
-generateStats();
+generateStatsTable();
