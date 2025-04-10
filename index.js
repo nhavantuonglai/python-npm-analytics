@@ -6,7 +6,9 @@ const fs = require('fs');
 async function getPackageList(maintainer = 'nhavantuonglai') {
   try {
     const response = await axios.get(`https://registry.npmjs.org/-/v1/search?text=maintainer:${maintainer}`);
-    return response.data.objects.map(pkg => pkg.package.name);
+    const packages = response.data.objects.map(pkg => pkg.package.name);
+    console.log(`Tìm thấy ${packages.length} gói: ${packages.join(', ')}`);
+    return packages;
   } catch (error) {
     console.error('Lỗi khi lấy danh sách gói:', error.message);
     return [];
@@ -19,6 +21,10 @@ async function getDownloads(packageName) {
     const downloads = response.data.downloads.reduce((sum, day) => sum + day.downloads, 0) || 0;
     return { name: packageName, downloads };
   } catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.log(`Gói ${packageName} không tồn tại trên npm. Gán lượt tải = 0.`);
+      return { name: packageName, downloads: 0 };
+    }
     console.error(`Lỗi khi lấy lượt tải cho ${packageName}:`, error.message);
     return { name: packageName, downloads: 0 };
   }
@@ -28,6 +34,7 @@ async function generateStatsTable() {
   const packages = await getPackageList();
   if (!packages.length) {
     console.log('Không tìm thấy gói nào.');
+    fs.writeFileSync('stats.md', '### Thống kê lượt tải npm trong 12 tháng qua\n\nKhông có dữ liệu.');
     return;
   }
 
