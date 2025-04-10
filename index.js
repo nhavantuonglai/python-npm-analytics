@@ -37,11 +37,11 @@ async function generateStatsTable() {
 	const totalDownloads = downloadStats.reduce((sum, pkg) => sum + pkg.downloads, 0);
 	const topPackages = downloadStats.sort((a, b) => b.downloads - a.downloads).slice(0, 3);
 
-	let table = `### Thống kê lượt tải npm trong 12 tháng qua`;
-	table += `Tổng lượt tải: ${totalDownloads}`;
-	table += `#### Danh sách 3 package có lượt tải cao nhất`;
-	table += `| Thứ hạng | Tên gói						 | Lượt tải`;
-	table += `|----------|---------------------|----------|`;
+	let table = `### Thống kê lượt tải npm trong 12 tháng qua\n\n`;
+	table += `Tổng lượt tải: ${totalDownloads}\n\n`;
+	table += `#### Danh sách 3 package có lượt tải cao nhất\n\n`;
+	table += `| Thứ hạng | Tên gói						 | Lượt tải |\n`;
+	table += `|----------|---------------------|----------|\n`;
 	topPackages.forEach((pkg, index) => {
 		table += `| ${index + 1}			 | ${pkg.name.padEnd(19)} | ${pkg.downloads.toString().padEnd(8)} |\n`;
 	});
