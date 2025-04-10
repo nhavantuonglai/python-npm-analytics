@@ -8,7 +8,7 @@ const rl = readline.createInterface({
 	output: process.stdout
 });
 
-function messages(msg_type, …args) {
+function messages(msg_type, ...args) {
 	const messages_dict = {
 		"welcome": "NPM Analytics là công cụ phân tích thống kê lượt tải gói npm, được phát triển bởi @nhavantuonglai.\nHỗ trợ kỹ thuật: info@nhavantuonglai.com.",
 		"prompt-username": "Nhập tên người dùng: ",
