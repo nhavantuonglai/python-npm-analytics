@@ -1,4 +1,4 @@
-name: Generate Python NPM Analytics
+name: Update NPM Downloads
 
 on:
   schedule:
@@ -6,21 +6,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-stats:
+  update-downloads:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm install
-      - run: node index.js
-      - name: Commit stats.md
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate downloads JSON
+        run: node index.js --generate-json
+
+      - name: Commit and push changes
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-          git add stats.md
-          git commit -m "Update npm analytics table" || echo "No changes to commit"
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add npmjs/nhavantuonglai.json
+          git commit -m "Update downloads data for $(date +%Y%m%d)" || echo "No changes to commit"
           git push
