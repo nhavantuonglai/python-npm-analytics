@@ -35,7 +35,7 @@ function formatDate(date) {
 
 function getDateRange(endDate) {
 	const start = new Date(endDate);
-	start.setDate(endDate.getDate() - 29); // 30 days including endDate
+	start.setDate(endDate.getDate() - 29);
 	return `${formatDate(start)}:${formatDate(endDate)}`;
 }
 
@@ -130,7 +130,7 @@ async function generateJsonData(maintainer) {
 	const today = new Date();
 	const result = {};
 
-	for (let i = 0; i < 30; i++) {
+	for (let i = 0; i < 10; i++) {
 		const endDate = new Date(today);
 		endDate.setDate(today.getDate() - i);
 		const dateKey = formatDate(endDate);
