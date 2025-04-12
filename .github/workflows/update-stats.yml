@@ -1,4 +1,4 @@
-name: Update NPM Downloads
+name: npm-downloads-json
 
 on:
   schedule:

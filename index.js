@@ -67,9 +67,9 @@ async function getDownloads(packageName, range) {
 	} catch (error) {
 		let errorMsg = error.message;
 		if (error.response?.status === 404) {
-			errorMsg = 'Gói không tồn tại';
+			errorMsg = 'Gói không tồn tại.';
 		} else if (error.response?.status === 429) {
-			errorMsg = 'Quá nhiều yêu cầu';
+			errorMsg = 'Quá nhiều yêu cầu.';
 		}
 		return { downloads: 0, error: errorMsg };
 	}
