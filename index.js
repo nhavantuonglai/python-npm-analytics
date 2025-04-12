@@ -11,7 +11,7 @@ const rl = readline.createInterface({
 
 function messages(msg_type, ...args) {
 	const messages_dict = {
-		welcome: 'NPM Analytics - Phân tích lượt tải gói npm, bởi @nhavantuonglai.\nHỗ trợ: info@nhavantuonglai.com.',
+		welcome: 'NPM Analytics là công cụ phân tích, đo lường lượt tải gói npm thông qua trình tệp lệnh, được phát triển bởi @nhavantuonglai.\nHỗ trợ: info@nhavantuonglai.com.',
 		'prompt-username': 'Vui lòng nhập tên người dùng: ',
 		'username-invalid': 'Tên người dùng không được để trống.\nVui lòng nhập lại tên người dùng: ',
 		processing: 'Đang xử lý…',

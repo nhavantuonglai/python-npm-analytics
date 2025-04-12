@@ -1,6 +1,6 @@
 {
 	"name": "npmjs-analytics",
-	"version": "1.1.5",
+	"version": "1.1.6",
 	"description": "NPMJS Analytics is a Node.js tool that analyzes download statistics for npm packages maintained by a specified user.",
 	"main": "index.js",
 	"scripts": {
