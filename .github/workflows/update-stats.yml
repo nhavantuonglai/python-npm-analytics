@@ -1,4 +1,4 @@
-name: npm-downloads-json
+name: python-npm-analytics-json
 
 on:
   schedule:
