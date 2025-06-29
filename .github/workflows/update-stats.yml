@@ -1,8 +1,8 @@
-name: python-npm-analytics-json
+name: checkout-npm-packages
 
 on:
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,24 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: checkout-repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: setup-node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: install-dependencies
         run: npm install
 
-      - name: Generate downloads JSON
+      - name: generate-downloads-json
         run: node index.js --generate-json
 
-      - name: Commit and push changes
+      - name: commit-and-push-changes
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add npmjs/nhavantuonglai.json
-          git commit -m "Update downloads data for $(date +%Y%m%d)" || echo "No changes to commit"
+          git commit -m "Cập nhật dữ liệu $(date +%Y%m%d)" || echo "Không có mô tả đính kèm."
           git push
